@@ -29,10 +29,11 @@ export const supportedService = {
   baidu: Symbol.for('baidu'),
   volc: Symbol.for('volc'),
   deeplx: Symbol.for('deeplx'),
+  tencent: Symbol.for('tencent'),
 };
 
 // 当前使用的翻译服务商，如果不配置，则不执行翻译流程
-export const translateServiceProvider = supportedService.volc;
+export const translateServiceProvider = supportedService.tencent;
 
 // 翻译结果字幕文件内容配置
 export const contentTemplateRuleMap = {
@@ -49,7 +50,7 @@ export const contentTemplate = {
 };
 
 // 翻译内容输出模板规则，默认只输出翻译内容, 支持 contentTemplateRuleMap 内的规则
-export const contentTemplateRule = contentTemplateRuleMap.onlyTranslate;
+export const contentTemplateRule = contentTemplateRuleMap.sourceAndTranslate;
 
 // 原始字幕文件保存命名规则 支持 fileName, sourceLanguage, targetLanguage 变量
 // 如果为空，将不保存原始字幕文件

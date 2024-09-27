@@ -17,7 +17,9 @@ export default async function translate(folder, fileName, absolutePath) {
       const result = fs.readFileSync(absolutePath, 'utf8');
       const data = result.split('\n');
       const items = [];
-      for (var i = 0; i < data.length; i += 4) {
+
+      let counter = 0;
+      for (let i = 0; i < data.length; i += 4) {
         const source = data[i + 2];
         if (!source) continue;
         let text;
@@ -34,6 +36,10 @@ export default async function translate(folder, fileName, absolutePath) {
             const deeplx = await import('./service/deeplx.js');
             text = await deeplx.default(source);
             break;
+          case supportedService.tencent:
+            const tencent = await import('./service/tencent.js');
+            text = await tencent.default(source);
+            break;
           default:
             text = 'no supported service';
         }
@@ -44,6 +50,13 @@ export default async function translate(folder, fileName, absolutePath) {
           targetContent: text,
           sourceContent: source,
         });
+
+        counter++;
+
+        console.log(`Translate Process: ${counter} / ${(data.length / 4) >>> 0}`);
+
+        const sleepWork = new Promise((resolve) => setTimeout(resolve, 100));
+        await sleepWork;
       }
       const fileSave = path.join(folder, `${renderTemplate(targetSrtSaveName, { fileName, ...translateConfig })}.srt`);
       for (let i = 0; i <= items.length - 1; i++) {
